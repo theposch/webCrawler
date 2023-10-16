@@ -35,13 +35,13 @@ class Interpreter:
         # Settings
         self.local = False
         self.auto_run = False
-        self.debug_mode = False
+        self.debug_mode = true
         self.max_output = 2000
         self.safe_mode = "off"
 
         # Conversation history
         self.conversation_history = True
-        self.conversation_filename = None
+        self.conversation_filename = chathistory.txt
         self.conversation_history_path = get_storage_path("conversations")
 
         # LLM settings
