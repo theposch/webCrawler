@@ -1,3 +1,6 @@
+
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 cache = {}
 import html2text
 
@@ -40,7 +43,7 @@ def scrape_article_list_pages(total_pages):
             article_urls = extract_article_urls(soup)
             all_article_urls.extend(article_urls)
         else:
-            print(f'Failed to retrieve content from {page_url}')
+            logging.info(f'Failed to retrieve content from {page_url}')
     return all_article_urls
 
 # Function to extract details from an article page
