@@ -1,8 +1,10 @@
 Objective: Create a Python-based web scraper to extract article and transcript data from the "99 Percent Invisible" website for use in Obsidian.
 
-FIRST: SAVE  ALL FILES IN FOLDER 'SCRAPER'
+FIRST: SET WORKING DIRECTORY TO  'SCRAPER'folder.
 WRITE ALL CODE FILES INTO THIS FOLDER. ALWAYS SAVE EVERY SCRIPT YOUR WRITE AS A FILE BEFORE EXECUTING. 
-IF YOU RUN INTO AN ERROR, TRY AGAIN. IF YOU THEN NOT SUCCEEED, PAUSE AND ASK USER FOR  INSTRUCTIONS
+IF YOU RUN INTO AN ERROR, TRY AGAIN. IF YOU DONT SUCCEED ON SECOND TRY, TRY AN ALTERNATIVE  METHOD.
+
+YOU ALREADY WROTE SOME CODE  - continue writing it. here is the file with our script:/Users/christian/Github/open-interpreter/SCRAPER/scraper.py
 
 URL Structure:
 
