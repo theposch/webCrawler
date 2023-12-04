@@ -1,0 +1,35 @@
+Objective: Create a Python-based web scraper to extract article and transcript data from the "99 Percent Invisible" website for use in Obsidian.
+
+FIRST: SAVE  ALL FILES IN FOLDER 'SCRAPER'
+WRITE ALL CODE FILES INTO THIS FOLDER. ALWAYS SAVE EVERY SCRIPT YOUR WRITE AS A FILE BEFORE EXECUTING. 
+IF YOU RUN INTO AN ERROR, TRY AGAIN. IF YOU THEN NOT SUCCEEED, PAUSE AND ASK USER FOR  INSTRUCTIONS
+
+URL Structure:
+
+Article List Pages: https://99percentinvisible.org/episodes/page/{page_number} (1 to 46).
+Individual Article Pages: Extracted from list pages.
+Transcript Pages: Formed by modifying article URLs to https://99percentinvisible.org/episode/{article_slug}/transcript.
+Content Extraction Details:
+
+Article Pages:
+
+Title: HTML tag <h1 class="entry-title">.
+Author: HTML tag within <div class="meta-author">.
+Date: HTML tag <time class="updated">.
+Main Content: All text within <div class="entry-content">.
+Transcript Pages:
+
+Entire transcript within <div class="page-content transcript-content">.
+Pagination Handling: Iteratively navigate through 46 pages, incrementing {page_number} in the URL.
+
+Markdown File Generation:
+
+Two separate Markdown files for each article and its transcript.
+YAML Front Matter: Include title, date, author, tags.
+Internal Links: Add a link in each article's Markdown file to its transcript and vice versa.
+Technologies:
+
+Python scripting.
+BeautifulSoup for HTML parsing.
+Requests library for making HTTP requests.
+Expected Outcome: A script that efficiently scrapes the website, extracts relevant information, and creates structured Markdown files with internal links and YAML metadata for Obsidian use.
