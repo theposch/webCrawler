@@ -1,3 +1,6 @@
+cache = {}
+import html2text
+
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -6,13 +9,16 @@ import os
 base_url = 'https://99percentinvisible.org/episodes/page/'
 
 # Function to make HTTP requests and parse HTML content
+
 def get_html_content(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        return BeautifulSoup(response.content, 'html.parser')
-    except requests.RequestException as e:
-        print(f'Error fetching {url}: {e}')
+    if url in cache:  # Check if the content is in the cache
+        return cache[url]
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        cache[url] = soup  # Store the content in the cache
+        return soup
+    else:
         return None
 
 # Function to extract article URLs from a list page
@@ -53,7 +59,7 @@ def extract_article_details(url):
     date = date_tag.get_text(strip=True) if date_tag else 'No Date'
     
     content_tag = soup.find('div', class_='entry-content')
-    content = content_tag.get_text(strip=True) if content_tag else 'No Content'
+    content = html2text.html2text(str(content_tag)) if content_tag else 'No Content'
     
     return {
         'title': title,
@@ -72,7 +78,7 @@ def extract_transcript_details(article_url):
         return None
     
     transcript_tag = soup.find('div', class_='page-content transcript-content')
-    transcript_content = transcript_tag.get_text(strip=True) if transcript_tag else 'No Transcript Content'
+    transcript_content = html2text.html2text(str(transcript_tag)) if transcript_tag else 'No Transcript Content'
     
     return {
         'transcript_url': transcript_url,
@@ -80,33 +86,11 @@ def extract_transcript_details(article_url):
     }
 
 # Function to generate Markdown file for article or transcript
-def generate_markdown_file(details, file_type, folder_path):
+def generate_markdown_file(details, file_type, folder_path, related_file_path=None):
     yaml_front_matter = f"---\ntitle: {details['title']}\ndate: {details['date']}\nauthor: {details['author']}\ntags: [99pi, {file_type}]\n---\n"
     content = details['content'] if file_type == 'article' else details['transcript_content']
-    markdown_content = yaml_front_matter + '\n' + content
-    
-    file_name = details['title'].replace(' ', '_').replace('/', '_') + f'_{file_type}.md'
-    file_path = os.path.join(folder_path, file_name)
-    with open(file_path, 'w') as file:
-        file.write(markdown_content)
-    return file_path
-
-
-
-# Update the generate_markdown_file function to include internal links
-def generate_markdown_file(details, file_type, folder_path, related_file_path=None):
-    yaml_front_matter = f"---
-title: {details['title']}
-date: {details['date']}
-author: {details['author']}
-tags: [99pi, {file_type}]
----
-"
-    content = details['content'] if file_type == 'article' else details['transcript_content']
-    internal_link = f'
-[Link to {"transcript" if file_type == 'article' else "article"}]({related_file_path})' if related_file_path else ''
-    markdown_content = yaml_front_matter + '
-' + content + internal_link
+    internal_link = f'\n[Link to {"transcript" if file_type == "article" else "article"}]({related_file_path})' if related_file_path else ''
+    markdown_content = yaml_front_matter + '\n' + content + internal_link
     file_name = details['title'].replace(' ', '_').replace('/', '_') + f'_{file_type}.md'
     file_path = os.path.join(folder_path, file_name)
     with open(file_path, 'w') as file:
